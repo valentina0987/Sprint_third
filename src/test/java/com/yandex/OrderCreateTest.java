@@ -9,6 +9,9 @@ import org.junit.runners.Parameterized;
 
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
+
 
 @RunWith(Parameterized.class)
 public class OrderCreateTest {
@@ -37,14 +40,10 @@ public class OrderCreateTest {
         Order orderWithValidData = Order.getRandomOrder();
         orderWithValidData.setColor(colorArray);
         ValidatableResponse createResponse = scooterClient.createOrder(orderWithValidData);
-        int statusCode = createResponse.extract().statusCode();
-        if (statusCode == 201) {
-            orderId = createResponse.extract().path("track");
-        } else {
-            orderId = 0;
-        }
-        Assert.assertEquals("Неверный статус-код", 201, statusCode);
-        Assert.assertNotEquals("Не удалось создать заказ", 0, orderId);
+        orderId = createResponse.extract().path("track");
+
+        assertThat(orderId, greaterThan(0));
+
     }
 
 }

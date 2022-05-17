@@ -20,17 +20,11 @@ public class OrdersListGetTest {
     @Test
     @DisplayName("Получение списка всех заказов")
     public void checkGetAllOrders() {
-        int totalOrder;
         Response ordersResponse = scooterClient.getOrders();
         OrdersList scooterOrders = ordersResponse.body().as(OrdersList.class);
-        int statusCode = ordersResponse.then().extract().statusCode();
-        if (statusCode == 200) {
-            totalOrder = ordersResponse.then().extract().path("pageInfo.total");
-        } else {
-            totalOrder = 0;
-        }
+        int totalOrder = ordersResponse.then().statusCode(200).extract().path("pageInfo.total");
+
         assertThat(totalOrder, greaterThan(0));
-        Assert.assertEquals("Неправильный статус-код", 200, statusCode);
         Assert.assertFalse("Список заказов пустой", scooterOrders.getOrders().isEmpty());
     }
 }

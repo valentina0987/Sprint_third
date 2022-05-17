@@ -7,6 +7,7 @@ import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 
@@ -75,7 +76,8 @@ public class ScooterClient extends ScooterRestClient {
                 .body(order)
                 .when()
                 .post(ORDERS_PATH)
-                .then();
+                .then()
+                .statusCode(201);
     }
 
     @Step("Получение заказов")
@@ -168,9 +170,11 @@ public class ScooterClient extends ScooterRestClient {
 
     @Step("Отменить заказ по треку")
     public ValidatableResponse cancelOrderByTrack(int track) {
+        Map<String, Integer> body = new HashMap<>();
+        body.put("track", track);
         return given()
                 .spec(getBaseSpec())
-                .body("{\"track\": " + track + "}")
+                .body(body)
                 .put(COURIER_PATH + "cancel")
                 .then();
     }

@@ -12,7 +12,6 @@ public class ScooterRestClient {
     protected RequestSpecification getBaseSpec() {
         return new RequestSpecBuilder()
                 .addFilter(new AllureRestAssured())
-                .setBaseUri("http://qa-scooter.praktikum-services.ru/")
                 .setContentType(JSON)
                 .setBaseUri(BASE_URL)
                 .build();
